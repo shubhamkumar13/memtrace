@@ -756,6 +756,7 @@ module Writer = struct
         | None -> []
         | Some slot -> get_locations slot in
       let slot = convert_raw_backtrace_slot slot in
+      module Slot = Slot in
       match Slot.location slot with
       | None -> tail
       | Some { filename; line_number; start_char; end_char } ->
