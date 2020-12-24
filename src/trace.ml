@@ -749,6 +749,7 @@ module Writer = struct
     (Obj.magic b : Location_code.t array)
 
   let decode_raw_backtrace_entry callstack i : Location.t list =
+    let open Printexc in
     let rec get_locations slot : Location.t list =
       let tail =
         match get_raw_backtrace_next_slot slot with
