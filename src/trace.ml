@@ -750,13 +750,13 @@ module Writer = struct
 
   let decode_raw_backtrace_entry callstack i : Location.t list =
     let open Printexc in
+    module Slot = Slot;
     let rec get_locations slot : Location.t list =
       let tail =
         match get_raw_backtrace_next_slot slot with
         | None -> []
         | Some slot -> get_locations slot in
       let slot = convert_raw_backtrace_slot slot in
-      module Slot = Slot in
       match Slot.location slot with
       | None -> tail
       | Some { filename; line_number; start_char; end_char } ->
