@@ -750,7 +750,6 @@ module Writer = struct
 
   let decode_raw_backtrace_entry callstack i : Location.t list =
     let open Printexc in
-    module Slot = Slot;
     let rec get_locations slot : Location.t list =
       let tail =
         match get_raw_backtrace_next_slot slot with
