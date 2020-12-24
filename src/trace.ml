@@ -749,19 +749,18 @@ module Writer = struct
     (Obj.magic b : Location_code.t array)
 
   let decode_raw_backtrace_entry callstack i : Location.t list =
-    let open Printexc in
     let rec get_locations slot : Location.t list =
       let tail =
-        match get_raw_backtrace_next_slot slot with
+        match Printexc.get_raw_backtrace_next_slot slot with
         | None -> []
         | Some slot -> get_locations slot in
-      let slot = convert_raw_backtrace_slot slot in
-      match Slot.location slot with
+      let slot = Printexc.convert_raw_backtrace_slot slot in
+      match Printexc.Slot.location slot with
       | None -> tail
       | Some { filename; line_number; start_char; end_char } ->
-         let defname = match Slot.name slot with Some n -> n | _ -> "??" in
+         let defname = match Printexc.Slot.name slot with Some n -> n | _ -> "??" in
          { filename; line=line_number; start_char; end_char; defname }::tail in
-    get_locations (get_raw_backtrace_slot callstack i) |> List.rev
+    get_locations (Printexc.get_raw_backtrace_slot callstack i) |> List.rev
 
   let put_alloc_with_raw_backtrace t now ~length ~nsamples
     ~source ~callstack =
